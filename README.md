@@ -1,69 +1,77 @@
-# JamstackTemplates Next.js starter
+# Treble Clef Music School
 
-The shared starter for Next.js templates in the `JamstackTemplates` organization. Its canonical home is
-`JamstackTemplates/template-next`, alongside the templates generated from it.
-It is not a gallery design or a published demo. Business content is sample content. No application code
-in a website created from this template depends on the starter checkout or the portal repository.
+A playful, sheet-music-styled website for a fictitious community music school in Southbank, Melbourne,
+made as the `next-music-lessons` sample for the Jamstacks gallery. The design concept is
+"Practice book & concert programme": cream manuscript paper, engraved notation used as layout,
+a teacher's pencil notes, gold-star stickers and a printed concert programme. Dark mode is
+"stage lights". The business, people and contact details are invented.
 
-## Build your website
+It is a self-contained Next.js static export. Local development requires Node 24 or later and npm:
 
-Start in the checkout of the repository GitHub created from `JamstackTemplates/template-next`. All
-starter files are already present. Local development requires Node 24 or later and npm.
+```sh
+npm ci
+npm run dev        # local preview
+npm run check      # tests, typecheck and static build
+npm start          # serve the built out/ folder
+```
 
-To build a new site, fill in `plan/PLAN.md`, then tell the coding agent **`Implement plan/PLAN.md`**.
-In Claude Code, `/write-plan <business description>` drafts the brief for you. For a gallery template,
-pass the table row: `/write-plan next-type-style | Business | Description | Form purpose`.
 After reviewing the finished site, run `/cleanup-plan` or delete `plan/` and `.claude/skills/` by hand
-to remove all initial build instructions.
-
-To preview locally, run `npm ci` and `npm run dev` from the repository root.
+to remove the initial build instructions.
 
 ## Pages
 
 | Route | Purpose |
 | --- | --- |
-| `/` | Minimal content-driven home page and Organization JSON-LD |
-| `/contact/` | Hosted support form when configured; visible email alternative |
-| `/404.html` | Friendly static error page |
+| `/` | Hero, The Staff instrument picker, how a term works, featured teachers, next concert, term fees, visit. MusicSchool JSON-LD |
+| `/lessons/` | Instrument family filter, The Staff, tutor-book pages per instrument, fee schedule (`#fees`), group classes, policies |
+| `/teachers/` | All teachers as programme portraits with teaching days, plus how students are matched |
+| `/concerts/` | Upcoming concerts as ticket stubs, what happens at a concert, past concerts |
+| `/contact/` | Hosted enquiry form when configured, otherwise email; message checklist, address and hours |
+| `/404.html` | "That note isn't in the score." |
 
-## Make it yours
+## Make it yours: where to edit
 
-| File | Owns |
+| What you want to change | File and field |
 | --- | --- |
-| `content/business.ts` | Shared business name, contact details and starter sample copy |
-| `app/page.tsx`, `app/<route>/page.tsx` | Page composition and editable copy such as headings and calls to action |
-| `content/menu.ts` or `content/services.ts` (add when needed) | Industry-specific typed collections |
-| `site.config.json` | Public name, description, hostname, optional timeZone and Jamstacks integration |
-| `app/tailwind.input.css` | Theme tokens, utility mappings and small shared styles |
-| `components/site-header.tsx`, `site-footer.tsx` | Replaceable navigation and visual shell |
-| `lib/structured-data.ts` | Schema type/properties derived from real content |
-| `app/sitemap.ts` | Public routes; update when adding a page |
+| Term fees | `content/fees.ts` → `lessonLengths[].termFee` (whole AUD per 10-week term; longer lessons must cost more) |
+| Group-class places / waitlist | `content/fees.ts` → `groupClasses[].places` (0 shows a "Waitlist" sticker) |
+| Trial, sibling, hire and make-up policies | `content/fees.ts` → `policies` (and `trialFee`) |
+| A teacher's timetable fills or opens | `content/teachers.ts` → `acceptingStudents` (false shows "Waitlist only") |
+| Teachers on Home | `content/teachers.ts` → `featured` (exactly three) |
+| Add or edit a teacher | `content/teachers.ts`; the portrait uses `signatureColour` and `hairstyle` |
+| Concerts | `content/concerts.ts`; add new ones as `upcoming`, change to `past` afterwards. The site never infers this from today's date |
+| Instruments | `content/instruments.ts`; `staffPosition` (0–8, unique) places the note on The Staff; `teacherIds` must exist |
+| Email, phone, address, directions, hours | `content/business.ts` |
+| Message checklist and reply wording on Contact | `content/business.ts` → `enquiries` |
+| Page headings, intros, buttons and captions | the route's `app/**/page.tsx`, e.g. `<Hero.Heading>` in `app/page.tsx` |
+| Name, description, domain, time zone | `site.config.json` (and `business.name`) |
+| Colours, fonts, textures | `app/tailwind.input.css` |
+| Drawn art | `components/art/` (notation, instruments, recital room, portraits, stage pieces) |
+| Sitemap routes | `app/sitemap.ts` |
 
-Edit page copy in the route file, for example `<Hero.Heading>Seasonal flowers</Hero.Heading>`
-in `app/page.tsx` for the Home page. The backing
-component owns the styling and interactions. Use typed fields for data the site needs to look up or
-reuse. For example, change `business.email` to update Contact. Rename in `business.name` and
-`site.config.json.name`. Add a typed core-content file for frequent owner edits: a food menu should use
-the existing sections/items/price/availability model; changes such as sold out, seasonal or a new section
-should be data edits with actionable content tests. Do not add business content to configuration: the
-Jamstacks provisioner replaces that file wholesale, possibly adding `provisioningId`.
+Every collection is checked by `lib/content-rules.ts` during the build and in `npm test`. A bad edit fails
+with a message naming the item, for example `instrument "cello": teacher "nobody" does not exist in
+content/teachers.ts`. Hours must be same-day intervals; overnight hours are not supported.
 
-## Appearance and optional local-business features
+Example edit: change the 45-minute fee to 630 in `content/fees.ts` and set `ukulele-club` `places` to 4,
+then rebuild. The Home fee row, the Lessons fee schedule and the Ukulele Club entry all update, and its
+"Waitlist" sticker disappears.
 
-The starter uses system fonts, neutral Tailwind v4 tokens and the published `jamstacks` package's
-ThemeProvider, ThemeScript and DarkModeToggle. No font download or font licence file is needed for
-system fonts. Each designed template chooses and documents self-hosted font packages and their licences.
-Utilities live in components; colours originate in CSS tokens with light, automatic-dark and explicit-dark
-values plus `@theme inline` mappings. Keep the hosted form's primary fill dark enough for white text.
-Keyboard focus, reduced motion and print styles are included. The footer credit is yours to keep,
-reword or remove.
+## Appearance
 
-For a business with visiting hours, add address/directions/hours to typed content, set the IANA `timeZone`
-in site.config.json and use optional `GoogleMap`, `TimeZoneNote` and `OpenBadge` components. GoogleMap
-accepts an address and descriptive title; map helpers need no key. `OpenBadge` accepts seven
-`OpeningHours` records, uses the business zone and refreshes each minute in the browser; static/no-JS
-output is neutral. Same-day intervals only: overnight hours fail validation and need a tested extension
-before use. The baseline home page does not load a map or assert opening hours.
+- Fonts are self-hosted from npm (SIL Open Font License): Abril Fatface (`@fontsource/abril-fatface`)
+  for headings, Quicksand (`@fontsource-variable/quicksand`) for body text and Schoolbell
+  (`@fontsource/schoolbell`) for pencil annotations.
+- Colours are tokens in `app/tailwind.input.css` with light, automatic-dark and explicit-dark values. The
+  vermilion primary carries white button text in both modes. The ThemeProvider, ThemeScript and
+  DarkModeToggle come from the published `jamstacks` package.
+- All illustrations are inline SVG components in `components/art/`, coloured by the same tokens.
+  `public/og.png` is a 1200×630 social image made from the finished hero art.
+- The front-desk status ("Open now · until 20:00") is computed in the browser in `Australia/Melbourne` and
+  refreshes every minute. Without JavaScript it reads "see the hours below".
+- The instrument filter on Lessons appears only with JavaScript; without it every instrument is shown.
+- Keyboard focus, a skip link, reduced motion and print styles are included. The footer credit is yours
+  to keep, reword or remove.
 
 ## Public configuration
 

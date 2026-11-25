@@ -1,0 +1,22 @@
+{
+  "templateId": "next-music-lessons",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "fullPage": false,
+  "captures": [
+    {
+      "mode": "light",
+      "sha256": "d7826532d97c0c1e461abe62709f8624db6bc2b91692603b75d9a386caeeb41f",
+      "file": "jamstacks/home-light.jpg",
+      "bytes": 197984
+    },
+    {
+      "mode": "dark",
+      "sha256": "d6666e5eb04f61f1c0b017a1bdbbe0baa3b59ee725982fc8b365c8e642e30a07",
+      "file": "jamstacks/home-dark.jpg",
+      "bytes": 161653
+    }
+  ]
+}

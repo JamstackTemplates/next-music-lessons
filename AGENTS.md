@@ -28,6 +28,21 @@ site.config.json. Keep the provisioner's config shape: name, description, domain
 jamstacks.siteId/cdnUrl and optional provisioningId. Business data never goes there. Reuse the design's
 illustrations and palette rather than adding unrelated assets.
 
+## This site: Treble Clef Music School
+
+File ownership for future edits:
+
+- `content/business.ts`: name, contact details, address, directions, hours, enquiry checklist and reply.
+- `content/fees.ts`: lesson lengths and term fees, group classes (places), policies.
+- `content/teachers.ts`, `content/instruments.ts`, `content/concerts.ts`: the collections.
+- `lib/content-rules.ts`: validation run by the build (`app/layout.tsx`) and `tests/content.test.ts`.
+- `lib/format.ts`: deterministic date/time formatting and DST-aware offsets for JSON-LD.
+- `components/art/`: bespoke SVG artwork. `components/the-staff.tsx` is the signature element.
+- Page copy lives in `app/**/page.tsx` as children of named components (`Hero.Heading`, `FeeTempo.Note`...).
+- Concerts are `upcoming` or `past` by data only; never compute that from the build date.
+- Copy rule (tested): no "booked", "confirmed", "reserved", "pay now" or "book now" anywhere in app,
+  components or content.
+
 ## Styling: Tailwind CSS v4
 
 Use utilities in components. `app/tailwind.input.css` owns tokens, theme mappings, base styles, small
